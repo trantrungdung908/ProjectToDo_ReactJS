@@ -1,5 +1,6 @@
 import React from "react";
 import Form from "../Form";
+import TodoItem from "../TodoItem";
 
 const TodoContainer = () => {
   const todos = [
@@ -21,31 +22,33 @@ const TodoContainer = () => {
       isDone: false,
       isEditting: true,
     },
+    {},
   ];
 
   const renderListItem = () => {
     return todos.map((todo, index) => {
       return (
-        <li key={todo.id}>
-          {todo.isEditting ? (
-            <Form />
-          ) : (
-            <>
-              <div className="task">
-                <label className="title">
-                  {index + 1}. {todo.label}
-                </label>
-              </div>
-              <div className="action">
-                <button className="btn btn-done">
-                  {todo.isDone ? "Undone" : "Done"}
-                </button>
-                <button className="btn btn-edit">Edit</button>
-                <button className="btn btn-delete">Delete</button>
-              </div>
-            </>
-          )}
-        </li>
+        <TodoItem key={todo.id || index} todo={todo} index={index} />
+        // <li key={todo.id}>
+        //   {todo.isEditting ? (
+        //     <Form />
+        //   ) : (
+        //     <>
+        //       <div className="task">
+        //         <label className="title">
+        //           {index + 1}. {todo.label}
+        //         </label>
+        //       </div>
+        //       <div className="action">
+        //         <button className="btn btn-done">
+        //           {todo.isDone ? "Undone" : "Done"}
+        //         </button>
+        //         <button className="btn btn-edit">Edit</button>
+        //         <button className="btn btn-delete">Delete</button>
+        //       </div>
+        //     </>
+        //   )}
+        // </li>
       );
     });
   };
@@ -53,7 +56,7 @@ const TodoContainer = () => {
     <div className="container">
       <div className="wrapper-container">
         <h1 className="heading">To-Do List</h1>
-        <Form />
+        <Form className="formAdd" btnText="Add" />
         <ul className="listtask">{renderListItem()}</ul>
       </div>
     </div>

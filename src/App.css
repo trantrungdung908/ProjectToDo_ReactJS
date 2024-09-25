@@ -133,6 +133,7 @@ li:last-child {
 }
 
 .title-done {
+  font-size: 20px;
   text-decoration-color: #333;
   text-decoration: line-through;
 }

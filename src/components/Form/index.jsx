@@ -1,15 +1,16 @@
 import React from "react";
+import Button from "../Button";
 
-const Form = () => {
+const Form = ({ className = "", btnText = "Submit", ...restProps }) => {
   return (
-    <form className="form formAdd">
+    <form className={`form ${className}`}>
       <input
         placeholder="Add your task"
         type="text"
         className="input-text"
         id="inputTask"
       />
-      <button className="btnAction">ADD</button>
+      <Button className="btnAction">{btnText}</Button>
     </form>
   );
 };
