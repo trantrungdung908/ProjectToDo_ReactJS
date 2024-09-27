@@ -1,34 +1,67 @@
-import React from "react";
+import React, { useState } from "react";
 import Form from "../Form";
 import TodoItem from "../TodoItem";
 
 const TodoContainer = () => {
-  const todos = [
-    {
-      id: 1701098599234,
-      label: "Task 1",
+  // const todos = [
+  //   {
+  //     id: 1701098599234,
+  //     label: "Task 1",
+  //     isDone: false,
+  //     isEditting: false,
+  //   },
+  //   {
+  //     id: 1701098599254,
+  //     label: "Task 2",
+  //     isDone: true,
+  //     isEditting: false,
+  //   },
+  //   {
+  //     id: 1701098603079,
+  //     label: "Task 3",
+  //     isDone: false,
+  //     isEditting: true,
+  //   },
+  //   {},
+  // ];
+
+  const [todos, setTodos] = useState([]);
+
+  const handleAdd = (value) => {
+    if (value === "") return;
+    const newTodo = {
+      id: Date.now(),
+      label: value,
       isDone: false,
       isEditting: false,
-    },
-    {
-      id: 1701098599254,
-      label: "Task 2",
-      isDone: true,
-      isEditting: false,
-    },
-    {
-      id: 1701098603079,
-      label: "Task 3",
-      isDone: false,
-      isEditting: true,
-    },
-    {},
-  ];
+    };
+    setTodos([...todos, newTodo]);
+  };
+
+  const handleDel = (id) => {
+    let filterTodo = todos.filter((todo) => todo.id !== id);
+    setTodos(filterTodo);
+  };
+
+  const handelEdit = (value, id) => {};
+
+  const handleDone = (id) => {
+    let doneTodo = todos.map((todo) =>
+      todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
+    );
+    setTodos(doneTodo);
+  };
 
   const renderListItem = () => {
     return todos.map((todo, index) => {
       return (
-        <TodoItem key={todo.id || index} todo={todo} index={index} />
+        <TodoItem
+          key={todo.id || index}
+          todo={todo}
+          index={index}
+          handleDel={handleDel}
+          handleDone={handleDone}
+        />
         // <li key={todo.id}>
         //   {todo.isEditting ? (
         //     <Form />
@@ -56,7 +89,7 @@ const TodoContainer = () => {
     <div className="container">
       <div className="wrapper-container">
         <h1 className="heading">To-Do List</h1>
-        <Form className="formAdd" btnText="Add" />
+        <Form className="formAdd" btnText="Add" handleAdd={handleAdd} />
         <ul className="listtask">{renderListItem()}</ul>
       </div>
     </div>

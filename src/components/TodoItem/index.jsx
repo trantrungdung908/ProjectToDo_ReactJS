@@ -2,8 +2,9 @@ import React from "react";
 import Form from "../Form";
 import Button from "../Button";
 
-const TodoItem = ({ todo, index }) => {
+const TodoItem = ({ todo, index, handleDel, handleDone }) => {
   if (!todo.id) return;
+
   return (
     <li>
       {todo.isEditting ? (
@@ -16,11 +17,19 @@ const TodoItem = ({ todo, index }) => {
             </label>
           </div>
           <div className="action">
-            <Button className="btn btn-done">
+            <Button
+              onClick={() => handleDone(todo.id)}
+              className="btn btn-done"
+            >
               {todo.isDone ? "Undone" : "Done"}
             </Button>
             {!todo.isDone && <Button className="btn btn-edit">Edit</Button>}
-            <Button className="btn btn-delete">Delete</Button>
+            <Button
+              onClick={() => handleDel(todo.id)}
+              className="btn btn-delete"
+            >
+              Delete
+            </Button>
           </div>
         </>
       )}
