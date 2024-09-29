@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Button from "../Button";
 
 const Form = ({ className = "", btnText = "Submit", ...restProps }) => {
-  const { handleAdd } = restProps;
+  const { handleSubmit, defaultValue } = restProps;
 
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(defaultValue || "");
 
   const _onSubmit = (e) => {
     e.preventDefault();
-    handleAdd(input);
+    if (input === "") return;
+    handleSubmit(input);
     setInput("");
   };
 

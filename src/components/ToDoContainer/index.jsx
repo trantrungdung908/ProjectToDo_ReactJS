@@ -43,7 +43,13 @@ const TodoContainer = () => {
     setTodos(filterTodo);
   };
 
-  const handelEdit = (value, id) => {};
+  const handleEditMode = (id) => {
+    let editTodo = todos.map((todo) => {
+      return todo.id === id ? { ...todo, isEditting: !todo.isEditting } : todo;
+    });
+
+    setTodos(editTodo);
+  };
 
   const handleDone = (id) => {
     let doneTodo = todos.map((todo) =>
@@ -52,6 +58,14 @@ const TodoContainer = () => {
     setTodos(doneTodo);
   };
 
+  const handleEditLabel = (id, value) => {
+    let editLabel = todos.map((item) =>
+      item.id === id
+        ? { ...item, label: value, isEditting: !item.isEditting }
+        : item
+    );
+    setTodos(editLabel);
+  };
   const renderListItem = () => {
     return todos.map((todo, index) => {
       return (
@@ -61,6 +75,8 @@ const TodoContainer = () => {
           index={index}
           handleDel={handleDel}
           handleDone={handleDone}
+          handleEditMode={handleEditMode}
+          handleEditLabel={handleEditLabel}
         />
         // <li key={todo.id}>
         //   {todo.isEditting ? (
@@ -89,7 +105,7 @@ const TodoContainer = () => {
     <div className="container">
       <div className="wrapper-container">
         <h1 className="heading">To-Do List</h1>
-        <Form className="formAdd" btnText="Add" handleAdd={handleAdd} />
+        <Form className="formAdd" btnText="Add" handleSubmit={handleAdd} />
         <ul className="listtask">{renderListItem()}</ul>
       </div>
     </div>

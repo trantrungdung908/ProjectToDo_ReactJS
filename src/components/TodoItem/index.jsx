@@ -2,13 +2,26 @@ import React from "react";
 import Form from "../Form";
 import Button from "../Button";
 
-const TodoItem = ({ todo, index, handleDel, handleDone }) => {
+const TodoItem = ({
+  todo,
+  index,
+  handleDel,
+  handleDone,
+  handleEditMode,
+  handleEditLabel,
+}) => {
   if (!todo.id) return;
 
   return (
     <li>
       {todo.isEditting ? (
-        <Form className="formAdd" btnText="Save" />
+        <Form
+          todoId={todo.id}
+          handleSubmit={(value) => handleEditLabel(todo.id, value)}
+          defaultValue={todo.label}
+          className="formAdd"
+          btnText="Save"
+        />
       ) : (
         <>
           <div className="task">
@@ -23,7 +36,14 @@ const TodoItem = ({ todo, index, handleDel, handleDone }) => {
             >
               {todo.isDone ? "Undone" : "Done"}
             </Button>
-            {!todo.isDone && <Button className="btn btn-edit">Edit</Button>}
+            {!todo.isDone && (
+              <Button
+                onClick={() => handleEditMode(todo.id)}
+                className="btn btn-edit"
+              >
+                Edit
+              </Button>
+            )}
             <Button
               onClick={() => handleDel(todo.id)}
               className="btn btn-delete"
