@@ -1,31 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Form from "../Form";
 import TodoItem from "../TodoItem";
 
 const TodoContainer = () => {
-  // const todos = [
-  //   {
-  //     id: 1701098599234,
-  //     label: "Task 1",
-  //     isDone: false,
-  //     isEditting: false,
-  //   },
-  //   {
-  //     id: 1701098599254,
-  //     label: "Task 2",
-  //     isDone: true,
-  //     isEditting: false,
-  //   },
-  //   {
-  //     id: 1701098603079,
-  //     label: "Task 3",
-  //     isDone: false,
-  //     isEditting: true,
-  //   },
-  //   {},
-  // ];
+  const [todos, setTodos] = useState(() => {
+    return JSON.parse(localStorage.getItem("todos")) || [];
+  });
 
-  const [todos, setTodos] = useState([]);
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const handleAdd = (value) => {
     if (value === "") return;
@@ -101,6 +85,7 @@ const TodoContainer = () => {
       );
     });
   };
+
   return (
     <div className="container">
       <div className="wrapper-container">
