@@ -6,11 +6,14 @@ const Form = ({ className = "", btnText = "Submit", ...restProps }) => {
 
   const [input, setInput] = useState(defaultValue || "");
 
+  const onSuccess = () => {
+    setInput("");
+  };
+
   const _onSubmit = (e) => {
     e.preventDefault();
     if (input === "") return;
-    handleSubmit(input);
-    setInput("");
+    handleSubmit(input, onSuccess);
   };
 
   const getValue = (e) => {
@@ -25,6 +28,7 @@ const Form = ({ className = "", btnText = "Submit", ...restProps }) => {
         type="text"
         className="input-text"
         id="inputTask"
+        autoFocus
       />
       <Button className="btnAction">{btnText}</Button>
     </form>

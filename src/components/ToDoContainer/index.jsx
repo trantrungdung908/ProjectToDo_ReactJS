@@ -1,33 +1,84 @@
 import React, { useEffect, useState } from "react";
 import Form from "../Form";
 import TodoItem from "../TodoItem";
+import axios from "axios";
 
 const TodoContainer = () => {
-  const [todos, setTodos] = useState(() => {
-    return JSON.parse(localStorage.getItem("todos")) || [];
-  });
+  // const [todos, setTodos] = useState(() => {
+  //   return JSON.parse(localStorage.getItem("todos")) || [];
+  // });
+
+  // useEffect(() => {
+  //   localStorage.setItem("todos", JSON.stringify(todos));
+  // }, [todos]);
+
+  const [todos, setTodos] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
+    queryTodos();
+  }, []);
 
-  const handleAdd = (value) => {
+  const queryTodos = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `https://65092931f6553137159b0494.mockapi.io/todos`
+      );
+      if (response.data.length > 0) {
+        setTodos(response.data.reverse());
+      }
+    } catch (error) {
+      alert("Error", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAdd = async (value, onSuccess) => {
     if (value === "") return;
-    const newTodo = {
-      id: Date.now(),
-      label: value,
-      isDone: false,
-      isEditting: false,
-    };
-    setTodos([...todos, newTodo]);
+    setLoading(true);
+    try {
+      const payload = {
+        label: value,
+        isDone: false,
+      };
+      const res = await axios.post(
+        "https://65092931f6553137159b0494.mockapi.io/todos",
+        payload
+      );
+      if (res.data) {
+        onSuccess?.();
+        setTodos((prevTodos) => [res.data, ...prevTodos]);
+      }
+    } catch (error) {
+      alert("Error", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDel = (id) => {
-    let filterTodo = todos.filter((todo) => todo.id !== id);
-    setTodos(filterTodo);
+  const handleDel = async (id) => {
+    if (!id) return;
+
+    setLoading(true);
+    try {
+      const res = await axios.delete(
+        `https://65092931f6553137159b0494.mockapi.io/todos/${id}`
+      );
+      if (res.data) {
+        setTodos((prevTodos) => prevTodos.filter((item) => item.id !== id));
+      }
+    } catch (error) {
+      alert("Error", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleEditMode = (id) => {
+  const handleEditMode = async (id) => {
+    if (!id) return;
+
     let editTodo = todos.map((todo) => {
       return todo.id === id ? { ...todo, isEditting: !todo.isEditting } : todo;
     });
@@ -35,21 +86,64 @@ const TodoContainer = () => {
     setTodos(editTodo);
   };
 
-  const handleDone = (id) => {
-    let doneTodo = todos.map((todo) =>
-      todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
-    );
-    setTodos(doneTodo);
+  const handleDone = async (id) => {
+    if (!id) return;
+
+    setLoading(true);
+
+    try {
+      const changeTodo = todos.find((item) => item.id === id);
+      const payload = { ...changeTodo, isDone: !changeTodo.isDone };
+      console.log(payload);
+
+      const res = await axios.put(
+        `https://65092931f6553137159b0494.mockapi.io/todos/${id}`,
+        payload
+      );
+
+      if (res.data) {
+        const dataDone = todos.map((item) =>
+          item.id === res.data.id ? { ...res.data } : item
+        );
+        setTodos(dataDone);
+      }
+    } catch (error) {
+      alert("Error", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleEditLabel = (id, value) => {
-    let editLabel = todos.map((item) =>
-      item.id === id
-        ? { ...item, label: value, isEditting: !item.isEditting }
-        : item
-    );
-    setTodos(editLabel);
+  const handleEditLabel = async (id, value) => {
+    if (!id || !value) return;
+
+    setLoading(true);
+
+    try {
+      const changeValue = todos.find((item) => item.id === id);
+
+      const { isEditting, ...rest } = changeValue;
+      const payload = { ...rest, label: value };
+
+      const res = await axios.put(
+        `https://65092931f6553137159b0494.mockapi.io/todos/${id}`,
+        payload
+      );
+
+      if (res.data) {
+        setTodos((preTodo) =>
+          preTodo.map((item) =>
+            item.id === res.data.id ? { ...res.data, isEditting: false } : item
+          )
+        );
+      }
+    } catch (error) {
+      alert("Error", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
   const renderListItem = () => {
     return todos.map((todo, index) => {
       return (
@@ -93,6 +187,7 @@ const TodoContainer = () => {
         <Form className="formAdd" btnText="Add" handleSubmit={handleAdd} />
         <ul className="listtask">{renderListItem()}</ul>
       </div>
+      {loading && <div className="loading" />}
     </div>
   );
 };
