@@ -61,35 +61,25 @@ sup {
 }
 
 .wrapper-container {
-  max-width: 540px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 50px;
 }
 
-.heading {
-  font-size: 60px;
-  text-align: center;
-  font-weight: bold;
-}
-
 .form {
-  position: relative;
+  /* position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 55px;
   width: 100%;
   overflow: hidden;
-  border-radius: 50px;
-}
-
-.formAdd {
-  margin: 50px auto;
+  border-radius: 50px; */
 }
 
 .input-text {
   flex: 1;
-  background-color: #edeef0;
+  background-color: #000000;
   padding: 0 20px;
   width: 100%;
   height: 100%;

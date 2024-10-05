@@ -1,6 +1,10 @@
 import React from "react";
 import Form from "../Form";
-import Button from "../Button";
+import Button, {
+  StyledButton,
+  StyledDoneButton,
+  StyledEditButton,
+} from "../Button";
 
 const TodoItem = ({
   todo,
@@ -30,19 +34,20 @@ const TodoItem = ({
             </label>
           </div>
           <div className="action">
-            <Button
+            <StyledDoneButton
+              $isDone={todo.isDone}
               onClick={() => handleDone(todo.id)}
               className="btn btn-done"
             >
               {todo.isDone ? "Undone" : "Done"}
-            </Button>
+            </StyledDoneButton>
             {!todo.isDone && (
-              <Button
+              <StyledEditButton
                 onClick={() => handleEditMode(todo.id)}
                 className="btn btn-edit"
               >
                 Edit
-              </Button>
+              </StyledEditButton>
             )}
             <Button
               onClick={() => handleDel(todo.id)}

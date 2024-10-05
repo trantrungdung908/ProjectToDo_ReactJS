@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Form from "../Form";
 import TodoItem from "../TodoItem";
 import axios from "axios";
+import styled from "styled-components";
 
 const TodoContainer = () => {
   // const [todos, setTodos] = useState(() => {
@@ -181,15 +182,52 @@ const TodoContainer = () => {
   };
 
   return (
-    <div className="container">
-      <div className="wrapper-container">
+    <StyledContainer>
+      <StyledWrapper className="wrapper-container">
         <h1 className="heading">To-Do List</h1>
-        <Form className="formAdd" btnText="Add" handleSubmit={handleAdd} />
-        <ul className="listtask">{renderListItem()}</ul>
-      </div>
-      {loading && <div className="loading" />}
-    </div>
+        <Form btnText="Add" handleSubmit={handleAdd} />
+        <StyledList>{renderListItem()}</StyledList>
+      </StyledWrapper>
+      {loading && <StyledLoading />}
+    </StyledContainer>
   );
 };
+
+const StyledContainer = styled.div`
+  max-width: 2560px;
+  width: 100%;
+  margin: 0 auto;
+  height: 100vh;
+`;
+
+const StyledWrapper = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 50px;
+
+  .heading {
+    font-size: 60px;
+    text-align: center;
+    font-weight: bold;
+  }
+`;
+
+const StyledList = styled.ul`
+  margin: 50px auto;
+`;
+
+const StyledLoading = styled.div`
+  height: 100%;
+  border-radius: 8px;
+  background: black;
+  cursor: not-allowed;
+  opacity: 0.5;
+  z-index: 1;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+`;
 
 export default TodoContainer;
